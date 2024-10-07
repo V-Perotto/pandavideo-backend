@@ -1,0 +1,30 @@
+{
+  "name": "pandavideo",
+  "version": "1.0.0",
+  "description": "Este projeto é um servidor backend `Node.js` para interagir com a API da **PandaVideo**, fornecendo dados ao frontend. Ele inclui autenticação de usuários, rotas protegidas, caching de vídeos e manipulação de erros.\r Pré-requisitos",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "bcryptjs": "^2.4.3",
+    "cookie": "^0.7.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.7.0",
+    "node-cache": "^5.1.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}
