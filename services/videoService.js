@@ -1,20 +1,20 @@
-const axios = require('axios');
-const NodeCache = require('node-cache');
-const videoCache = new NodeCache({ stdTTL: 600 });
+import axios from 'axios';
 
-exports.getVideos = async (filters) => {
-  const cacheKey = JSON.stringify(filters);
-  const cachedVideos = videoCache.get(cacheKey);
+export default class VideoService {
 
-  if (cachedVideos) {
-    return cachedVideos;
-  }
+    async getVideos() {
 
-  const response = await axios.get(
-    'https://api.myvideo.com/videos',
-    { params: filters }
-  );
+        const response = await axios.get(
+            'https://api-v2.pandavideo.com.br/videos',
+            { 
+                headers: {
+                    'accept': 'application/json',
+                    'content-type': 'application/json',
+                    'Authorization': process.env.PANDA_API_KEY
+                }
+            }
+        );
+        return response.data;
+    };
 
-  videoCache.set(cacheKey, response.data);
-  return response.data;
-};
+}
