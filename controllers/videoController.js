@@ -1,13 +1,16 @@
-const videoService = require('../services/videoService');
+import VideoService from '../services/videoService.js';
 
-exports.getVideos = async (req, res) => {
-  try {
-    const filters = req.query;
-    const videos = await videoService.getVideos(filters);
-    res.status(200).json(videos);
-  } catch (error) {
-    res.status(500).json(
-        { message: 'Error fetching videos', error }
-    );
-  }
-};
+export default class VideoController {
+
+    async getVideos(req, res, next) {
+        try {
+            const videos = await VideoService.getVideos();
+            res.status(200).json(videos);
+        } catch (error) {
+            return next(new ErrorHandler(500, "Erro ao buscar o(s) vídeo(s)."));
+        }
+    };
+
+}
+
+

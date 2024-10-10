@@ -1,60 +1,35 @@
-const User = require('../models/userModel');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import AuthService from '../services/authService.js';
+import ErrorHandler from '../utils/errorHandler.js';
 
-exports.signup = async (req, res) => {
-  try {
-    const { username, password } = req.body;
+export default class AuthController {
 
-    if (!username || !password) {
-        return res.status(400).json(
-          { message: 'Usuário e senha são obrigatórios!' }
-        );
-    }
-    if (password.length < 8) {
-        return res.status(400).json(
-          { message: 'A senha deve ter pelo menos 8 caracteres.' }
-        );
-    }
-
-    const user = new User({ username, password });
-    await user.save();
-    
-    const token = jwt.sign(
-        { userId: user._id }, 
-        process.env.JWT_SECRET, 
-        { expiresIn: '1h' }
-    );
-    res.status(201).json({ token });
-  } catch (error) {
-    res.status(500).json({ message: 'Erro ao se conectar', error });
-  }
-};
-
-exports.login = async (req, res) => {
-  try {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-      return res.status(400).json(
-        { message: 'Usuário e senha são obrigatórios!' }
-      );
+    async loginAccount(req, res) {
+        try {
+            const AuthService = new AuthService();
+            const authenticateUser = await AuthService.authenticateUser(req.body);
+            if (authenticateUser === null) {
+                return next(new ErrorHandler(404, "O e-mail informado não está cadastrado."));
+            }                
+            if (authenticateUser === true) {
+                return next(new ErrorHandler(403, "Não foi possível encontrar um processo para esse usuário."));
+            }
+            if (authenticateUser === false) {
+                return next(new ErrorHandler(401, "A senha informada está inválida."));
+            }
+            return res.status(200).json({ message: 'Login aprovado', token: authenticateUser });
+        } catch (error) {
+            return next(new ErrorHandler(500, 'Erro ao tentar realizar o login'));
+        }
     }
 
-    const user = await User.findOne({ username });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json(
-        { message: 'Credenciais inválidas.' }
-      );
+    async createAccount(req, res, next) {
+        try {
+            const authService = new AuthService();
+            const createUser = await authService.createUser(req.body)
+            return res.status(201).json(createUser);
+        } catch (error) {
+            return next(new ErrorHandler(500, `Erro ao se conectar: ${error}`));
+        }
     }
-    
-    const token = jwt.sign(
-      { userId: user._id }, 
-      process.env.JWT_SECRET, 
-      { expiresIn: '1h' }
-    );
-    res.status(200).json({ token });
-  } catch (error) {
-    res.status(500).json({ message: 'Erro ao entrar na conta', error });
-  }
-};
+
+}
