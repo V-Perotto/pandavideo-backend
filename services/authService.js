@@ -15,59 +15,44 @@ export default class AuthService {
 
         data.password = await bcrypt.hash(data.password, 8);
         const createUser = await userModel.create(data);
-        console.log("createUser", createUser);
         return createUser;
     }
 
     async authenticateUser(data) {
-        const authenticateUser = await userModel.findOne({ email: data.email })
-        if (!authenticateUser) {
-            return authenticateUser;
-        } 
-        const checkPassword = await bcrypt.compare(data.password, authenticateUser.password);
+        const authenticateUser = await userModel.findOne({ 
+            email: data.email 
+        });
+        const checkPassword = await bcrypt.compare(
+            data.password, 
+            authenticateUser.password
+        );
         if (!checkPassword) {
             return false;
         }
-        const processes = await ProcessModel.find({ "user": authenticateUser.id, "status": { $ne: "Concluído"}})
-        if (processes == null) {
-            return true
-        }
-        const secret = process.env.SECRET_TOKEN
-        const token = jwt.sign({
-            id: authenticateUser._id,
-            type: authenticateUser.type,
-            process: processes[0].id
-        }, secret)
+        const token = jwt.sign(
+            { id: authenticateUser._id }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: '10m' }
+        );
+        await userModel.findOneAndUpdate(
+            { _id: data.id }, 
+            { token: token}
+        );
         return token;
     }
 
-    async getUser(data) {
-        try {
-            const getUser = await userModel.findOne({ _id: data.id });
-            return getUser;
-        } catch (error) {
-            throw Error("Houve problema ao buscar o usuário.");
+    async verifyAuthentication(data) {
+        const verification = await userModel.findOne({ 
+            id: data._id,
+            token: data.token 
+        });
+        const compareToken = await compare(
+            verification.token,
+            data.token
+        )
+        if (!compareToken) {
+            return false;
         }
-    }
-
-    async updateUser(data) {
-        if (data.password) {
-            data.password = await bcrypt.hash(data.password, 10);
-        }
-        const updateUser = await userModel.findOneAndUpdate({ _id: data.id }, data);
-        
-        let infoCompare = {
-            email: updateUser.email == data.email,
-            password: updateUser.password == data.password
-        }
-        if (!Object.values(infoCompare).includes(false)) {
-            return [updateUser, false];
-        } 
-        return [updateUser, true];
-    }
-
-    async deleteUser(data) {
-        const deleteUser = await userModel.findOneAndDelete({ _id: data.id });
-        return deleteUser;
+        return true;
     }
 }
