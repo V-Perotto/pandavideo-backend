@@ -1,21 +1,29 @@
 import jwt from 'jsonwebtoken';
+import userModel from '../models/userModel.js';
 
 export default class AuthMiddleware {
 
-    async protect(req, res, next) {
+    static async protect(req, res, next) {
         try {
             let token;
-            if (req.headers.authorization && 
-                req.headers.authorization.startsWith('Bearer')) {
-                token = req.headers.authorization.split(' ')[1];
+            if (req.headers && 
+                req.headers.bearer) {
+                token = req.headers.bearer;
             }
             if (!token) {
                 return res.status(401).json(
-                    { message: 'Não autorizado: sem token.', error: error.message }
+                    { message: 'Não autorizado: sem token.'}
                 );
             }
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = decoded;
+
+            const userToVerify = await userModel.findOne({ 
+                _id: decoded.id
+            });
+            if (!userToVerify || userToVerify.token !== token) {
+                return res.status(401).json({ message: 'Não autorizado: token inválido.' });
+            }
+            req.id = decoded;
             next();
         } catch (error) {
             res.status(401).json(
