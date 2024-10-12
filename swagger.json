@@ -37,16 +37,6 @@
         }
       }
     },
-    "/auth": {
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/users": {
       "get": {
         "description": "",
