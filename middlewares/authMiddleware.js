@@ -3,7 +3,7 @@ import userModel from '../models/userModel.js';
 
 export default class AuthMiddleware {
 
-    static async protect(req, res, next) {
+    async protect(req, res, next) {
         try {
             let token;
             if (req.headers && 
