@@ -7,3 +7,16 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password
     ports:
       - 27017:27017
+  node:
+    image: node:20.15.1
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 3000:3000
+    command: npm start
+    environment:
+      PORT: 3000
+      MONGO_URI: mongodb://root:password@localhost:27017/myvideo?authSource=admin
+      JWT_SECRET: secret_keys
+      PANDA_API_KEY: panda_keys
