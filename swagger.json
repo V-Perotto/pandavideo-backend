@@ -50,9 +50,16 @@
     "/videos": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "bearer",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
