@@ -12,10 +12,12 @@ export default class AuthService {
         if (userExists.length > 0) {
             throw Error("Esse usuário já existe.");
         }
-
-        data.password = await bcrypt.hash(data.password, 8);
-        const createUser = await userModel.create(data);
-        return createUser;
+        if (data.password.length < 8) {
+            throw Error("O tamanho da senha é inválido, insira outra senha.");
+        }
+        data.password = await bcrypt.hash(data.password, 10);
+        await userModel.create(data);
+        return true;
     }
 
     async authenticateUser(data) {
@@ -35,7 +37,7 @@ export default class AuthService {
             { expiresIn: '10m' }
         );
         await userModel.findOneAndUpdate(
-            { _id: data.id }, 
+            { _id: authenticateUser._id }, 
             { token: token}
         );
         return token;
@@ -43,16 +45,16 @@ export default class AuthService {
 
     async verifyAuthentication(data) {
         const verification = await userModel.findOne({ 
-            id: data._id,
-            token: data.token 
+            token: data.token
         });
-        const compareToken = await compare(
-            verification.token,
-            data.token
-        )
-        if (!compareToken) {
+        if (!verification) {
             return false;
         }
         return true;
+    }
+
+    async getUsers() {
+        const users = await userModel.find({});
+        return users;
     }
 }
