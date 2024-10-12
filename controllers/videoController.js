@@ -1,4 +1,5 @@
 import VideoService from '../services/videoService.js';
+import ErrorHandler from '../utils/errorHandler.js';
 
 export default class VideoController {
 
