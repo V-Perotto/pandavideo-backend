@@ -17,7 +17,6 @@ export default class AuthService {
         }
         data.password = await bcrypt.hash(data.password, 10);
         data.token = "";
-        console.log("data", data);
         await userModel.create(data);
         return true;
     }
@@ -38,13 +37,11 @@ export default class AuthService {
             process.env.JWT_SECRET, 
             { expiresIn: '1h' }
         );
-        console.log("authenticateUser._id", authenticateUser._id);
         const teste = await userModel.findOneAndUpdate(
             { _id: authenticateUser._id }, 
             { $set: { token: token } },
             { new: true}
         );
-        console.log("teste", teste);
         return token;
     }
 
