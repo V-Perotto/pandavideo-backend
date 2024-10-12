@@ -2,10 +2,10 @@ import axios from 'axios';
 
 export default class VideoService {
 
-    async getVideos() {
+    async getVideos(data) {
 
         const response = await axios.get(
-            'https://api-v2.pandavideo.com.br/videos',
+            'https://api-v2.pandavideo.com.br/videos//',
             { 
                 headers: {
                     'accept': 'application/json',
