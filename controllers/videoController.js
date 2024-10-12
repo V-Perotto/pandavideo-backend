@@ -6,7 +6,7 @@ export default class VideoController {
     async getVideos(req, res, next) {
         try {
             const videoService = new VideoService();
-            const videos = await videoService.getVideos(req.body);
+            const videos = await videoService.getVideos(req.params);
             res.status(200).json(videos);
         } catch (error) {
             return next(new ErrorHandler(500, "Erro ao buscar o(s) vídeo(s)."));
