@@ -44,16 +44,6 @@ export default class AuthController {
         }
     }
 
-    async verifyToken(req, res, next) {
-        try {
-            const authService = new AuthService();
-            const verifyAuthentication = await authService.verifyAuthentication(req.body);
-            return res.status(200).json(verifyAuthentication)
-        } catch (error) {
-            return next(new ErrorHandler(500, error.message));
-        }
-    }
-
     async getUsers(req, res, next) {
         try {
             const authService = new AuthService();

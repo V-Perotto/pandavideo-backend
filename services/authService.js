@@ -16,6 +16,8 @@ export default class AuthService {
             throw Error("O tamanho da senha é inválido, insira outra senha.");
         }
         data.password = await bcrypt.hash(data.password, 10);
+        data.token = "";
+        console.log("data", data);
         await userModel.create(data);
         return true;
     }
@@ -34,23 +36,16 @@ export default class AuthService {
         const token = jwt.sign(
             { id: authenticateUser._id }, 
             process.env.JWT_SECRET, 
-            { expiresIn: '10m' }
+            { expiresIn: '1h' }
         );
-        await userModel.findOneAndUpdate(
+        console.log("authenticateUser._id", authenticateUser._id);
+        const teste = await userModel.findOneAndUpdate(
             { _id: authenticateUser._id }, 
-            { token: token}
+            { $set: { token: token } },
+            { new: true}
         );
+        console.log("teste", teste);
         return token;
-    }
-
-    async verifyAuthentication(data) {
-        const verification = await userModel.findOne({ 
-            token: data.token
-        });
-        if (!verification) {
-            return false;
-        }
-        return true;
     }
 
     async getUsers() {
