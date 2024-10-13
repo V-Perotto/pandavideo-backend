@@ -4,7 +4,7 @@ const app = require('../app');
 describe('Auth Routes', () => {
   it('deve cadastrar um novo usuário', async () => {
     const res = await request(app).post('/api/auth/signup').send({
-      username: 'testuser',
+      email: 'testuser',
       password: 'testpass'
     });
     expect(res.statusCode).toEqual(201);
@@ -13,7 +13,7 @@ describe('Auth Routes', () => {
 
   it('deve fazer login em um usuário existente', async () => {
     const res = await request(app).post('/api/auth/login').send({
-      username: 'testuser',
+      email: 'testuser',
       password: 'testpass'
     });
     expect(res.statusCode).toEqual(200);
