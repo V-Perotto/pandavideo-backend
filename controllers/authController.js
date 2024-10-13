@@ -6,23 +6,21 @@ export default class AuthController {
     async loginAccount(req, res, next) {
         try {
             const authService = new AuthService();
-            const authenticateUser = await authService.authenticateUser(req.body);
-            if (authenticateUser === null) {
+            const response = await authService.authenticateUser(req.body);
+            if (response.status === null) {
                 return next(new ErrorHandler(
-                    404, "O e-mail informado não está cadastrado."
+                    404, response.message
                 ));
             }
-            if (authenticateUser === true) {
+            if (response.status === false) {
                 return next(new ErrorHandler(
-                    403, "Não foi possível encontrar um processo para esse usuário."
+                    401, response.message
                 ));
             }
-            if (authenticateUser === false) {
-                return next(new ErrorHandler(
-                    401, "A senha informada está inválida."
-                ));
-            }
-            return res.status(200).json({ message: 'Login aprovado', token: authenticateUser });
+            return res.status(200).json({ 
+                message: 'Login aprovado', 
+                token: authenticateUser 
+            });
         } catch (error) {
             return next(new ErrorHandler(
                 500, 'Erro ao tentar realizar o login'
@@ -34,11 +32,14 @@ export default class AuthController {
         try {
             const { password } = req.body;
             const authService = new AuthService();
-            await authService.createUser(req.body);
-            const authenticateUser = await authService.authenticateUser(
-                { email: req.body.email, password: password }
-            );
-            return res.status(201).json(authenticateUser);
+            const response = await authService.createUser(req.body);
+            if (response.status) {
+                const authenticateUser = await authService.authenticateUser(
+                    { email: req.body.email, password: password }
+                );
+                return res.status(201).json(authenticateUser);
+            }
+            return res.status(400).json(response.message);
         } catch (error) {
             return next(new ErrorHandler(500, error.message));
         }
