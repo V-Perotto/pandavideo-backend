@@ -11,7 +11,8 @@ export default class VideoService {
                     'accept': 'application/json',
                     'content-type': 'application/json',
                     'Authorization': process.env.PANDA_API_KEY
-                }
+                },
+                params: data
             }
         );
         return response.data;
