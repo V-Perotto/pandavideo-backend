@@ -1,136 +1,93 @@
-# PandaVideo Backend
+# PandaVideo Backend e Frontend
 
 Este projeto é um servidor backend `Node.js` para interagir com a API da **PandaVideo**, fornecendo dados ao frontend. Ele inclui autenticação de usuários, rotas protegidas, caching de vídeos e manipulação de erros.
 Pré-requisitos
 
-Antes de começar, você precisará ter instalado:
-```
-    Node.js (versão 18.x ou superior)
-    MongoDB (para a persistência de dados de usuários)
-    Docker (opcional, se desejar rodar em containers)
-```
+Antes de começar, você precisará ter instalado o Docker
 
 ## Como usar o código localmente
 ### 1. Clone o repositório
 
 ```
-git clone https://github.com/V-Perotto/pandavideo-backend.git
-cd pandavideovideo-backend
+git clone https://github.com/V-Perotto/teste-pandavideo.git
+cd teste-pandavideo
 ```
 
-### 2. Instalar as dependências
+### 2. Configurar o arquivo .env.dev
 
-```
-npm install
-```
-
-### 3. Configurar o arquivo .env
-
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis de ambiente:
+Crie um arquivo `.env.dev` na pasta `pandavideo-backend` do projeto com as seguintes variáveis de ambiente:
 
 #### Exemplo de variáveis de ambiente:
 ```
 PORT=3000
-MONGO_URI=mongodb://localhost:27017/pandavideo
-JWT_SECRET=sua-chave-secreta
+MONGO_URI="mongodb://root:password@mongodb:27017/admin?authSource=admin"
+JWT_SECRET=<<SECRET_KEY>>
+PANDA_API_KEY=<<TOKEN_KEY>>
 ```
 
-### 4. Iniciar o servidor
+### 3. Iniciar o Docker Compose
 
 ```
-npm start
+docker-compose up
 ```
 
-Agora o servidor estará rodando em http://localhost:3000.
+- Agora o servidor backend estará rodando em http://localhost:3000.
+- Agora o frontend estará rodando em http://localhost:8080/.
 
 ## Rotas da API
 ```
 Autenticação:
-    POST /api/auth/signup: Criar um novo usuário.
-    POST /api/auth/login: Realizar login e obter o token JWT.
+    POST /signup: Criar uma nova conta.
+    POST /login: Realizar login e autenticar.
 
 API de Vídeos (rotas protegidas):
-    GET /api/videos: Buscar e filtrar vídeos. (necessário token JWT no header)
-
+    GET /videos: Buscar e filtrar vídeos.
 ```
 
-## Rodar com Docker
-### 1. Criar a imagem Docker
-
-Certifique-se de que o Docker está instalado na sua máquina e crie a imagem com o seguinte comando:
-
-```
-docker build -t pandavideo-backend .
-```
-
-### 2. Executar o container
-
-Após criar a imagem, execute o container:
-
-```
-docker run -d -p 3000:3000 --name pandavideo-backend-container -e MONGO_URI=mongodb://seu-mongo-url -e JWT_SECRET=sua-chave-secreta pandavideo-backend
-```
-
-- O servidor estará acessível em ```http://localhost:3000```.
-- O parâmetro -e é usado para definir as variáveis de ambiente.
-
-### 3. Parar o container
-
-Se precisar parar o container:
-
-```
-docker stop pandavideo-backend-container
-```
-
-### 4. Verificar o container rodando
-
-Use o seguinte comando para verificar os containers ativos:
-
-```
-docker ps
-```
-
-## Testes
-### Executar testes
-
-O projeto inclui testes unitários e de integração para garantir a funcionalidade correta. Para rodar os testes, use:
-
-```
-npm test
-```
-
-Os testes estão localizados na pasta tests/, cobrindo rotas de autenticação e vídeos.
-
-#### Estrutura do Projeto
-
+#### Estrutura do Projeto - Back-End
 ```
 pandavideo-backend/
-├── controllers/        # Controladores da lógica de negócio
-├── middlewares/        # Middlewares (ex: autenticação)
-├── models/             # Modelos do Mongoose (ex: Usuários)
-├── routes/             # Definição das rotas da API
-├── services/           # Serviços que lidam com a lógica externa (ex: API de vídeos)
-├── tests/              # Testes unitários e de integração
-├── utils/              # Utilitários (ex: manipuladores de erro)
-├── app.js              # Configuração principal do Express
-├── server.js           # Ponto de entrada do servidor
-├── Dockerfile          # Definição da imagem Docker
-├── .env                # Variáveis de ambiente (não incluído no repositório)
-└── README.md           # Este guia
+├── src/
+│   ├── controllers/        # Controladores que implementam a lógica de negócios
+│   ├── middlewares/        # Middlewares para funcionalidades como autenticação
+│   ├── models/             # Modelos do Mongoose para gerenciamento de dados (ex: Usuários)
+│   ├── routes/             # Definição das rotas da API
+│   ├── services/           # Serviços para interações externas (ex: API de vídeos)
+│   ├── tests/              # Testes unitários e de integração
+│   ├── utils/              # Funções utilitárias (ex: manipuladores de erro)
+├── app.js                  # Configuração principal do Express
+├── package-lock.json       # Pacote de bibliotecas npm no estado lock
+├── package.json            # Pacote de bibliotecas npm
+├── swagger.js              # Configuração para construir o Swagger
+```
+
+#### Estrutura do Projeto - Front-End
+```
+pandavideo-frontend/
+├── public/                 # Página index e ícone
+├── src/
+│   ├── assets/             # Diretório de imagens
+│   ├── components/         # Componentes das páginas
+│   │   ├── css/
+│   │   ├──js/
+│   ├── router/             # Definição das rotas
+│   ├── services/           # Serviços para interações externas
+│   ├── views/              # Telas de visualização
+│   ├── App.vue             # Tela principal do app
+│   ├── main.js             # Criação do app
+├── babel.config.js         # Configuração do Babel
+├── jsconfig.json           # Configuração do JS
+├── package-lock.json       # Pacote de bibliotecas npm no estado lock
+├── package.json            # Pacote de bibliotecas npm
+├── vue.config.js           # Configuração do Vue
 ```
 
 ## Tecnologias Utilizadas
 
-- **Node.js**: Runtime para o backend.
+- **Node.js**: Linguagem para o backend.
 - **Express.js**: Framework web para criação das rotas e middleware.
 - **MongoDB + Mongoose**: Banco de dados NoSQL para persistência de dados.
 - **JWT (jsonwebtoken)**: Para autenticação de usuários.
 - **Axios**: Para realizar requisições à API externa.
-- **Docker**: Para containerizar a aplicação e rodar em qualquer máquina.
+- **Docker**: Para criar containeres das aplicações e rodar em qualquer máquina.
 - **Jest & Supertest**: Para testes unitários e de integração.
-
-## Considerações Finais
-
-Com este guia, você pode rodar a aplicação localmente ou via Docker. A aplicação implementa um backend funcional com autenticação, gerenciamento de vídeos e suporte a caching para melhorar a performance.
-
-Se você tiver problemas ou dúvidas, sinta-se à vontade para abrir uma issue ou entrar em contato!
