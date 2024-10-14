@@ -19,7 +19,7 @@ export default class AuthController {
             }
             return res.status(200).json({ 
                 message: 'Login aprovado', 
-                token: authenticateUser 
+                token: response.message 
             });
         } catch (error) {
             return next(new ErrorHandler(

@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'url';
-import { mongoose, Schema } from 'mongoose';
+import { mongoose } from 'mongoose';
 import path from 'path';
 import express from 'express';
 import cors from 'cors';
@@ -7,9 +7,9 @@ import swaggerAutogen from 'swagger-autogen';
 import SwaggerUI from 'swagger-ui-express';
 import dotenv from 'dotenv';
 
-import handler from "./utils/errorHandler.js"
-import AuthRoutes from './routes/authRoutes.js';
-import VideoRoutes from './routes/videoRoutes.js';
+import handler from "./src/utils/errorHandler.js"
+import AuthRoutes from './src/routes/authRoutes.js';
+import VideoRoutes from './src/routes/videoRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
