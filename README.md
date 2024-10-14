@@ -1,19 +1,29 @@
 # PandaVideo Backend e Frontend
 
-Este projeto é um servidor backend `Node.js` para interagir com a API da **PandaVideo**, fornecendo dados ao frontend. Ele inclui autenticação de usuários, rotas protegidas, caching de vídeos e manipulação de erros.
-Pré-requisitos
+Este projeto contempla um servidor backend em `Node.js` e uma aplicação frontend em `Vue.js` que interagem com a API da **PandaVideo**, fornecendo dados de vídeos. Elas incluem autenticação de usuários, rotas protegidas, retorno de vídeos e manipulação de erros.
 
-Antes de começar, você precisará ter instalado o Docker
+## Sumário
 
-## Como usar o código localmente
+- [Pré-requisitos](#pré-requisitos)
+- [Como rodar o Projeto](#como-rodar-o-projeto) 
+    - [1. Clone o repositório](#1-clone-o-repositório)
+    - [2. Configure o arquivo `.env.dev`](#2-configure-o-arquivo-envdev)
+    - [3. Inicie o Docker Compose](#3-inicie-o-docker-compose)
+- [Rotas da API](#rotas-da-api)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+
+## Pré-requisitos
+
+Antes de começar, você precisará ter instalado o [Docker].
+
+## Como rodar o projeto
 ### 1. Clone o repositório
-
+```bash
+$ git clone https://github.com/V-Perotto/teste-pandavideo.git
+$ cd teste-pandavideo
 ```
-git clone https://github.com/V-Perotto/teste-pandavideo.git
-cd teste-pandavideo
-```
 
-### 2. Configurar o arquivo .env.dev
+### 2. Configure o arquivo `.env.dev`
 
 Crie um arquivo `.env.dev` na pasta `pandavideo-backend` do projeto com as seguintes variáveis de ambiente:
 
@@ -25,10 +35,12 @@ JWT_SECRET=<<SECRET_KEY>>
 PANDA_API_KEY=<<TOKEN_KEY>>
 ```
 
-### 3. Iniciar o Docker Compose
+### 3. Inicie o Docker Compose
 
-```
-docker-compose up
+Na pasta raiz (`teste-pandavideo`), rode o seguinte comando:
+
+```bash
+$ docker-compose up
 ```
 
 - Agora o servidor backend estará rodando em http://localhost:3000.
@@ -84,10 +96,19 @@ pandavideo-frontend/
 
 ## Tecnologias Utilizadas
 
-- **Node.js**: Linguagem para o backend.
-- **Express.js**: Framework web para criação das rotas e middleware.
-- **MongoDB + Mongoose**: Banco de dados NoSQL para persistência de dados.
-- **JWT (jsonwebtoken)**: Para autenticação de usuários.
-- **Axios**: Para realizar requisições à API externa.
-- **Docker**: Para criar containeres das aplicações e rodar em qualquer máquina.
-- **Jest & Supertest**: Para testes unitários e de integração.
+- **[Node.js]**: Linguagem para o backend.
+- **[Express.js]**: Framework web para criação das rotas e middleware.
+- **[MongoDB] + [Mongoose]**: Banco de dados NoSQL para persistência de dados.
+- **[JWT] (jsonwebtoken)**: Para autenticação de usuários.
+- **[Axios]**: Para realizar requisições à API externa.
+- **[Docker]**: Para criar containeres das aplicações e rodar em qualquer máquina.
+- **[Jest] & Supertest**: Para testes unitários e de integração.
+
+[Docker]: https://www.docker.com/
+[Node.js]: https://nodejs.org/en
+[Express.js]: http://expressjs.com/
+[MongoDB]: https://www.mongodb.com/
+[Mongoose]: https://mongoosejs.com/
+[JWT]: https://jwt.io/
+[Axios]: https://axios-http.com/docs/intro
+[Jest]: https://jestjs.io/
