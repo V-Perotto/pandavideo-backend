@@ -18,23 +18,42 @@ export default {
             videos: [],
             search: '',
             params: {
-                page: 0,
-                limit: 1,
-                title: '',
-                status: ''
+                page: 1,
+                limit: 10
             }
         };
     },
-    computed: {
-        filteredVideos() {
-            return this.videos.filter(video =>
-                video.title.toLowerCase().includes(this.search.toLowerCase())
-            );
-        }
+    mounted() {
+      let pandaPlayerScript = document.createElement('script')
+      pandaPlayerScript.setAttribute('src', 'https://player.pandavideo.com.br/api.v2.js')
+      document.head.appendChild(pandaPlayerScript)
     },
-    async getVideos() {
-        const response = await axios.get('http://localhost:3000/videos', this.params);
+    computed: {
+      filteredVideos() {
+        const search = this.search.trim().toLowerCase();
+        if (this.videos.length > 0) {
+          return this.videos.filter(video => {
+              return video.title && video.title.toLowerCase().includes(search);
+          });
+        }
+        return this.videos;
+      }
+    },
+    async created() {
+      try {
+        const queryString = new URLSearchParams(this.params).toString();
+        const response = await axios.get(`http://localhost:3000/videos?${queryString}`, 
+          { headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Bearer': localStorage.getItem("token")
+            } 
+          }
+        );
         this.videos = response.data;
+      } catch(error) {
+        console.error(`Erro no Created(): ${error}`)
+      }
     }
 }
 </script>

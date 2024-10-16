@@ -1,11 +1,13 @@
 <template>
     <div v-if="videos">
-        <h1>{{ videos.title }}</h1>
-        <h3>{{ videos.description }}</h3>
-        <img :src="videos.thumbnail" :alt="videos.thumbnail">
-        <iframe :src="videos.video_player" frameborder="0" allowfullscreen></iframe>
-        <p>Published on: {{ videos.created_at }}</p>
-        <p>Views: {{ videos.views }}</p>
+        <div v-for="video in videos" v-bind:key="video.id">
+            <h1>{{ video.title }}</h1>
+            <h3>{{ video.description }}</h3>
+            <img :src="video.thumbnail" :alt="video.thumbnail">
+            <iframe :src="video.video_player" frameborder="0" allowfullscreen></iframe>
+            <p>Published on: {{ video.created_at }}</p>
+            <p>Status: {{ video.status }}</p>
+        </div>
     </div>
 </template>
 
@@ -20,9 +22,20 @@ export default {
         };
     },
     name: 'VideoPageComponent',
-    async getVideos() {
-        const response = await axios.get('http://localhost:3000/videos');
-        this.videos = response.data;
+    async created() {
+        try {
+            const response = await axios.get('http://localhost:3000/videos',
+                { headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Bearer': localStorage.getItem("token")
+                } 
+            }
+            );
+            this.videos = response.data;
+        } catch(error) {
+            console.error(`Erro no Created(): ${error}`)
+        }
     }
 }
 </script>

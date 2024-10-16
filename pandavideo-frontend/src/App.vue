@@ -5,7 +5,6 @@
         <ul v-if="isLoggedIn">
           <li><router-link to="/">Home</router-link></li>
           <li><router-link to="/videos">Video List</router-link></li>
-          <li><router-link to="/video/:id/detail">Video Details</router-link></li>
         </ul>
         <ul v-else>
           <li><router-link to="/login">Login</router-link></li>

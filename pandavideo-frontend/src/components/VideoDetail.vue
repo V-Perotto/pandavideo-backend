@@ -1,14 +1,15 @@
 <template>
   <div class="video-detail" v-if="video">
     <div class="video-container">
-      <video controls :src="video.url" />
+      <video controls :src="video.video_player" />
     </div>
     <div class="video-info">
+      <p>{{ video }}</p>
       <h2>{{ video.title }}</h2>
       <p>{{ video.description }}</p>
       <div class="video-meta">
-        <span>Publicado em: {{ formattedDate }}</span>
-        <span>Visualizações: {{ video.views }}</span>
+        <span>Publicado em: {{ formattedDate(video) }}</span>
+        <span>Qualidades de Vídeo disponíveis: {{ video.playback }}</span>
       </div>
     </div>
   </div>
@@ -18,42 +19,12 @@
 </template>
 
 <script>
-// Importa o serviço para lidar com chamadas de API
-import VideoService from '@/services/VideoService';
+import videodetail from './js/videodetail';
 
 export default {
-  data() {
-    return {
-      video: null,  // Inicializa o vídeo como null para o estado de carregamento
-      params: this.$route.params,  // Obtém o ID do vídeo a partir da rota
-    };
-  },  
   name: 'VideoDetailComponent',
-  computed: {
-    // Computa a data de publicação formatada
-    formattedDate() {
-      if (this.video) {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(this.video.published_at).toLocaleDateString(undefined, options);
-      }
-      return '';
-    },
-  },
-  async mounted() {
-    await this.fetchVideoDetails();  // Usa async diretamente no hook de ciclo de vida
-  },
-  methods: {
-    // Método para buscar detalhes do vídeo
-    async fetchVideoDetails() {
-      try {
-        this.video = await VideoService.getVideoDetails(this.params);
-      } catch (error) {
-        console.error('Erro ao carregar os detalhes do vídeo:', error);
-        // Aqui você pode lidar com erros, como redirecionar o usuário ou exibir uma mensagem amigável
-      }
-    },
-  },
-};
+  ...videodetail,
+}
 </script>
 
 <style scoped>
@@ -81,7 +52,7 @@ video {
 .video-meta {
   margin-top: 10px;
   font-size: 0.9em;
-  color: #666;
+  color: #777;
 }
 
 h2 {
