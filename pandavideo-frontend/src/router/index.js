@@ -10,7 +10,7 @@ const routes = [
     { path: '/videos', name: 'VideoPageComponent', component: VideoPage },
     { path: '/login', name: 'LoginComponent', component: Login },
     { path: '/signup', name: 'SignupComponent', component: Signup },
-    { path: '/video/:id/detail', name: 'VideoDetailsComponent', component: VideoDetail },
+    { path: '/video/:id', name: 'VideoDetailsComponent', component: VideoDetail },
 ];
 
 const router = createRouter({

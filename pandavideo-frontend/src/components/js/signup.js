@@ -18,18 +18,17 @@ export default {
                     password: this.password
                 });
                 if (response.status === 201) {
-                    const token = response.data;
-                    localStorage.setItem('token', token);
-                    this.message = 'Conta criada!'
+                    localStorage.setItem('token', response.data.message);
+                    this.message = response.data.status
                     this.error = '';
                     this.$router.push('/');
                 } else {
-                    this.error = response.data;
+                    this.error = response.data.message;
                     this.message = '';
                 }
                 // this.$router.push({ name: 'HomeComponent' });
             } catch (err) {
-                this.error = err.message || 'Erro ao criar conta';
+                this.error = err.message || 'sErro ao criar conta';
                 this.message = '';
             }
         }

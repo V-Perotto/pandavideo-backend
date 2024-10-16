@@ -9,9 +9,23 @@ export default class VideoController {
             const videos = await videoService.getVideos(req.query);
             res.status(200).json(videos);
         } catch (error) {
-            return next(new ErrorHandler(500, "Erro ao buscar o(s) vídeo(s)."));
+            return next(new ErrorHandler(
+                500, `Erro ao buscar o(s) vídeo(s).: ${error.message}`
+            ));
         }
     };
+
+    async getVideoDetails(req, res, next) {
+        try {
+            const videoService = new VideoService();
+            const videos = await videoService.getVideoDetails(req.params.id);
+            res.status(200).json(videos);
+        } catch (error) {
+            return next(new ErrorHandler(
+                500, "Erro ao buscar os detalhes do vídeo."
+            ));
+        }
+    }
 
 }
 
