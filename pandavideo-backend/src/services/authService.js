@@ -39,7 +39,7 @@ export default class AuthService {
             authenticateUser.password
         );
         if (!checkPassword) {
-            return { status: false, message: "A senha informada está inválida."};
+            return { status: false, message: "A senha informada está inválida." };
         }
         const token = jwt.sign(
             { id: authenticateUser._id }, 

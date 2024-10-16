@@ -43,6 +43,9 @@ Na pasta raiz (`teste-pandavideo`), rode o seguinte comando:
 $ docker-compose up
 ```
 
+Esse comando será suficiente para rodar as 3 aplicações em conjunto, baixando as dependências presentes nos pacotes `packages.json` e rodando os sistemas.
+
+- Agora o banco de dados estará rodando em http://localhost:27017.
 - Agora o servidor backend estará rodando em http://localhost:3000.
 - Agora o frontend estará rodando em http://localhost:8080/.
 

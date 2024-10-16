@@ -14,7 +14,7 @@ export default class AuthController {
             }
             if (response.status === false) {
                 return next(new ErrorHandler(
-                    401, response.message
+                    401, `Erro de status False: {response.message}`
                 ));
             }
             return res.status(200).json({ 
@@ -23,7 +23,7 @@ export default class AuthController {
             });
         } catch (error) {
             return next(new ErrorHandler(
-                500, 'Erro ao tentar realizar o login'
+                500, `Erro ao tentar realizar o login: ${error}`
             ));
         }
     }
@@ -39,9 +39,9 @@ export default class AuthController {
                 );
                 return res.status(201).json(authenticateUser);
             }
-            return res.status(400).json(response.message);
+            return next(new ErrorHandler(400, `Erro de campos ao criar conta ${response.message}`));
         } catch (error) {
-            return next(new ErrorHandler(500, error.message));
+            return next(new ErrorHandler(500, `Erro ao criar conta: ${error}`));
         }
     }
 
